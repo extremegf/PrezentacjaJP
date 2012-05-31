@@ -175,6 +175,35 @@
   \end{itemize}
 \end{frame}
 
+
+\begin{frame}{nesC}
+   Czê¶æ funkcjonalno¶ci TinyOS realizuje kompilator nesC:
+   \begin{itemize}
+     \item nesC: rozszerzenie C, jest te¿ kompilowane do C
+     \item wielow±tkowo¶æ bez wyw³aszczeñ
+     \item statyczna 'obiektowo¶æ' - na poziomie kompilacji
+%     \item zdarzenia, polecenia i zadania
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{nesC - organizacja kodu}
+	Organizacja kodu:
+   \begin{itemize}
+   	 \item dwukierunkowy zbiór sygnatur funkcji - interfejs
+   	 \begin{itemize}
+   	    \item zdarzenie (event)
+   	    \item zadanie (task)
+   	    \item polecenie (command)
+   	 \end{itemize}
+     \item kod C - modu³y
+     \begin{itemize}
+     	\item wykorzystujê i dostarcza interfejsów
+     \end{itemize}
+     \item ³±czenie wielu komponentów w jeden - konfiguracja
+%     \item zdarzenia, polecenia i zadania
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Pojêcie hermetycznego komponentu}
   \begin{itemize}
     \item MainC
