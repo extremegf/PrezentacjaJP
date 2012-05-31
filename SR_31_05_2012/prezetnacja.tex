@@ -105,7 +105,24 @@
   \end{itemize}
 \end{frame}
 
-% Przyk³ad
+\begin{frame}[fragile]{Przyk³ad kodu Texas Instruments}
+\begin{verbatim}
+ 24 #include "msp430x22x4.h"
+ 25 
+ 26 void main(void)
+ 27 {
+ 28   WDTCTL = WDT_ADLY_250;                    
+ 29   IE1 |= WDTIE;                             
+ 30   P1DIR |= 0x01;                           
+ 31 
+ 32   __bis_SR_register(LPM3_bits + GIE);       
+ 33 }
+ 34 
+ 35 // Watchdog Timer interrupt service routine
+ 36 #pragma vector = WDT_VECTOR
+ 37 __interrupt void watchdog_timer(void)
+\end{verbatim}
+\end{frame}
 
 
 \begin{frame}{Sterowniki w chronos}
