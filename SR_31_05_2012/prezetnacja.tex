@@ -88,6 +88,12 @@
 
 \begin{frame}{Zasadniczy problem}
    ????problem zasadniczy - czas ¿ycia na bateriach i~zu¿ycie energii - to decyduje o~wszystskich kompromisach projektowych!??????????
+
+    % \item du¿e problemy z~zarz±dzaniem pamiêci± (crash gdy jej zabraknie)
+    % \item czêste b³êdy przy wspó³bie¿no¶ci, ze wzglêdu na przeploty z~przerwaniami
+    % \item b³êdy podwójnej lub zapomnianej inicjalizacji
+    % \item trudne do ogarniêcia zale¿no¶ci miêdzy komponentami
+    % \item oddzielna kompilacja utrudnia statyczn± analizê
 \end{frame}
 
 \begin{frame}{Tradycyjny sposób ich programowania}
@@ -105,97 +111,95 @@
   \end{itemize}
 \end{frame}
 
-%--------------------------------------------------------------------------------
-\begin{frame}{TinyOS 1.0}
-  Zalety:
-  \begin{itemize}
-    \item nadaje aplikacji strukturê
-    \item daje za darmo zarz±dzanie zdaniami i~tym samym sposób my¶lenia na którym mo¿na siê oprzeæ
-    \item dziêki interfejsom architektury HAA zapewnia przeno¶no¶æ wielu aplikacji miêdzy platformami
-    \item pozwala ³±czyæ ze sob± protoko³y i~algorytmy wynalezione przez ró¿ne grupy (LPL, CTP, Tricle)
-    \item pozostawia wielk± elastyczno¶æ programi¶cie (to wci±¿ C)
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{TinyOS 1.0}
-  Wady:
-  \begin{itemize}
-    \item du¿e problemy z~zarz±dzaniem pamiêci± (crash gdy jej zabraknie)
-    \item czêste b³êdy przy wspó³bie¿no¶ci, ze wzglêdu na przeploty z~przerwaniami
-    \item b³êdy podwójnej lub zapomnianej inicjalizacji
-    \item trudne do ogarniêcia zale¿no¶ci miêdzy komponentami
-    \item oddzielna kompilacja utrudnia statyczn± analizê
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{TinyOS 1.0}
-  Wnioski:
-  \begin{itemize}
-    \item mo¿na by du¿o skorzystaæ, gdyby poczyniæ pewnie silniejsze za³o¿enia
-      o~jêzyku programowania i~zarz±dzaniu zasobami
-    \item potrzeba wiêkszej hermetyzacji modu³ów oraz ³atwiejszego sposobu
-      organizowania zale¿no¶ci miêdzy modu³ami
-    \item przydatna by³a by statyczna analiza kodu aplikacji
-    \item ogólnie, bardzo potrzebne by³o lepsze wsparcie narzêdziowe
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{TinyOS 1.0}
-
-  {\bf nesC } nadziej± na rozwi±zanie powy¿szych problemów.
+\begin{frame}nesC{}
+  ?????????????
 \end{frame}
 
 \begin{frame}{TinyOS 2.0}
-  Najwa¿niejsze cechy:
+  Jak to dzia³a?
   \begin{itemize}
-    \item rozwi±zuje problemy rozpoznane przy pracy z~TinyOS 1.0
-    \item pamiêæ alokowana ca³kowicie statycznie, w~czasie kompilacji
-    \item statyczna analiza przeplotów wykonania wspó³bie¿nego~generowanie
-      ostrze¿eñ w~czasie kompilacji
-    \item automatyczna inicjalizacja wci±ganych komponentów
-    \item statyczna analiza inicjalizacji (@once)
-    \item przejrzyste granice miêdzy komponentami, wyznaczone przez interfejsy
-    \item mo¿liwo¶æ dog³êbnej analizy i~optymalizacji kodu
-    \item wykorzystanie dorobku w~dziedzinie kompilatorów
+    \item Gdzie¶ w~kodzie (komponent MainC) startuje funkcja main() - dla nas niewidoczna
+    \item Wywo³uje ona metody interfejsów Init i~Boot
+    \item W~ten sposób inicjalizowane s± urz±dzenia i~dane aplikacji
+    \item Dalej wykonuj± siê ju¿ tylko przerwania i~pêtla schedulera
+    \item Przerwania generuje np. zegar (\emph{event Timer.fired()})
+    \item Task  dla schedulera to funkcja \emph{void f(void)}
+    \item Kod, np. w~trakcie obs³ugi przerwania, zleca wykonanie tasku wywo³aniem \emph{post zadanie()}
+    \item Praca TinyOS to ci±g³a obs³uga przerwañ i~wykonywanie task'ów
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{TinyOS 2.0}
+  Najwa¿niejsze zalety:
+  \begin{itemize}
+    \item Rozwi±zuje problemy zarz±dzania pamiêci± dziêki ca³kowicie statycznej alokacji
+    \item Dba o~poprawn± inicjalizacjê u¿ytych komponentów (@once i~automatyzacja)
+    \item Porz±dkuje wykonanie g³ównego (scheduler) i~obs³ugê przerwañ
+    \item Zapewnia statyczn± analizê przeplotów i~ostrzega o~wy¶cigach do zasobów
+    \item Dostarcza spójnych i~hermetycznych komponentów, które s± ³atwe w~u¿yciu
+    \item Bardzo upraszcza zarz±dzanie zale¿no¶ciami miêdzy komponentami
+    \item Umo¿liwia statyczn± analizê kodu ca³ej aplikacji
+    \item Nie marnuje dorobku w~zakresie kompilatorów
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{TinyOS 2.0}
+  Zalety zwi±zane ze struktur± kodu:
+  \begin{itemize}
+    \item U³atwia my¶lenie i~projektowanie dostarczaj±c gotowej struktury systemu
+    \item Dostarcza i~wspera wiele platform wspó³dziel±cych jedn± bazê kodu
+    \item Umo¿liwia powstawanie interfejsów wysokiego poziomu (HAA)
+    \item Sprawia, ¿e implementacje algorytmów opracowywanych przez ró¿ne grupy mog±
+      byæ u¿yte w~jednej aplikacji
+
+      \begin{itemize}
+        \item Low power listening
+        \item TRICLE
+        \item Collection tree protocol
+      \end{itemize}
+
+    \item Dostarcza wielu bibliotek, ³atwych i~gotowych do u¿ycia przy nowych platformach
+    \item Ma bardzo przyjazn± licencjê
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Pojêcie hermetycznego komponentu}
+  Jest to co¶ co bardzo u³atwia pracê programisty.
   \begin{itemize}
     \item MainC
       \begin{itemize}
-        \item zawo³am wszystkie metody init() interfejsów Init
-        \item zawo³am potem zawo³am metody boot() interfejsów Boot
-        \item wywo³am pêtlê zadañ
+        \item wo³a metody init() interfejsów Init
+        \item wo³a metody boot() interfejsów Boot
+        \item wchodzi pêtlê task schedulera
       \end{itemize}
 
     \item PlatformLCDC
       \begin{itemize}
-        \item pod³±czê wewnêtrzn± inicjalizacjê do MainC
-        \item dajê interfejs LCDDriver
+        \item pod³±cza wewnêtrzn± inicjalizacjê do MainC
+        \item inicjalizuje kontroler LCD
+        \item dostarcza interfejs LCDDriver
       \end{itemize}
 
     \item SerialActiveMessageC
       \begin{itemize}
-        \item wezmê PlatformSerialC, który zapewni mi interfejs UartStream
-        \item w³±czê ca³y kod pakietowej obs³ugi portu szeregowego
-        \item dam Ci interfejs AMSend z~metod± send()
+        \item bierze z~platformy PlatformSerialC, który dostarcza interfejs UartStream
+        \item pod³±cza kod pakietowej obs³ugi portu szeregowego
+        \item dostarcza m. in. interfejs AMSend z~metod± send()
       \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Hermetyczne komponenty}
+\begin{frame}{Obszary systemu TinyOS}
   \begin{itemize}
-    \item platforma dostarcza kilkana¶cie komponentów do obs³ugi urz±dzeñ
-    \item biblioteki TOS dostarczaj± swoje komponenty z~us³ugami wy¿szego poziomu
-    \item aplikacje (bêd±ce komponentami) dostarczaj± komponenty implementuj±ce
-      logikê
+    \item Platforma dostarcza kilkana¶cie komponentów do obs³ugi urz±dzeñ (np. strumieñ bajtów)
+    \item Biblioteki TOS dostarczaj± swoje komponenty z~us³ugami wy¿szego poziomu (np. transmisja pakietowa)
+    \item Aplikacje dostarczaj± modu³y implementuj±ce logikê aplikacji
   \end{itemize}
-  Bierzemy wiêc odpowiednie pude³ka, ³±czymy je w~konfiguracji i~uzyskujemy
+  Elementy te zbierane s± razem i~³±czone za pomoc± konfiguracji, w~efekcie czego uzyskujemy
   dzia³aj±cy program.
 \end{frame}
 
-\begin{frame}{Wy¶wietlacz PC -> LCD}
+\begin{frame}{Przyk³ad: wy¶wietlacz PC -> LCD}
   To jest aplikacja!
 
   \tt{components MainC, SerialActiveMessageC;}
@@ -222,8 +226,17 @@
 \end{frame}
 
 \begin{frame}{Case study: Integrated concurency and power management}
+  Problem:
   \begin{itemize}
-    \item trzeba rozwi±zaæ konflikty o~zasoby
+    \item Kilka szyn komunikacyjnych
+    \item Ka¿da ma kilka urz±dzeñ, ale obs³ugiwaæ mo¿e tylko jedno
+    \item Wszystko trzeba jeszcze w³±czaæ i~wy³±czaæ
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Case study: Integrated concurency and power management}
+  \begin{itemize}
+    \item Trzeba rozwi±zaæ konflikty o~zasoby
     \item ale równie¿ oszczêdzaæ energiê, gdy zasób nie jest u¿ywany
   \end{itemize}
   Okazuje siê, ¿e oba problemy s± maj± wspólne rozwi±zanie.
@@ -234,7 +247,7 @@
   \tt{interface Resource \{ }
 
   \tt{ \hspace{4 mm} async command error\_t request(); }
-  
+
   \tt{ \hspace{4 mm} event void granted(); }
 
   \tt{ \hspace{4 mm} async command error\_t release(); }
@@ -251,6 +264,27 @@
     \centering
     \includegraphics[height=0.7 \textheight]{rozwiazanie.png}
   \end{figure}
+\end{frame}
+
+\begin{frame}{Case study: Integrated concurency and power management}
+  \begin{itemize}
+    \item Klient prosi o zasób
+    \item Arbiter rozpatruje zapytania
+    \item Je¶li urz±dzenie wy³±czone, konfiguruje je
+    \item Power manager dba by procesor nie przeszed³ w zbyt g³êboki stan u¶pienia
+    \item Klient dostaje urz±dzenie gotowe do dzia³ania
+    \item Potem je zwalnia
+    \item Gdy zabraknie ju¿ rz±dañ urz±dzenie jest wy³±czane
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Case study: Integrated concurency and power management}
+  \begin{itemize}
+    \item Os±ga to efektywno¶æ blisk± 99\% rêcznie dostrojonym rozwi±zaniom.
+    \item Pamiêtajmy, ¿e chcemy mo¿liwie skróciæ czas gdy pr±do¿erne urz±dzenia
+      s± w³±czone, wiêc ci±gle co¶ w³±czamy i wy³±czamy - a tu takiego kodu
+      prawie nie ma
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Case study: Zordon App}
@@ -301,6 +335,18 @@
 
   App.TopLCDBlinker -> TopLCDBlinkerC;
   }
+\end{frame}
+
+\begin{frame}{S³owo o~debugowaniu}
+  \begin{itemize}
+    \item Wa¿nym probleme jest to, ¿e aplikacje jest do¶æ trudno debugowaæ
+    \item Mamy funkcjê printf
+    \item Dla Chronos'a dzia³a nawet debugger w~Eclipse!
+  \end{itemize}
+  Najczêstrzy przypadek jest i~tak taki: Mia³a ¶wieciæ dioda. Wgrywamy - nie
+  ¶wieci. I~co?
+
+  Piotr opowie wiêcej jak temu zaradziæ.
 \end{frame}
 
 
