@@ -13,7 +13,7 @@
 \subtitle{Nowa era programowania mikrourz±dzeñ} % (optional)
 
 \author % (optional, use only with lots of authors)
-{Przemys³aw Horban}
+{Przemys³aw Horban i~Jacek Migda³}
 
 \institute{Uniwersytet Warszawski}
 \date[Short Occasion] % (optional)
@@ -52,6 +52,60 @@
   \titlepage
 \end{frame}
 
+\begin{frame}{Zegarki eZ430-Chronos}
+  \begin{figure} [ht]
+    \centering
+    \includegraphics[width=0.3 \linewidth]{ez430-chronos.jpeg}
+  \end{figure}
+  \begin{itemize}
+    \item architektura MSP430
+    \item pracujemy nad przeniesieniem TinyOS na t± platformê
+    \item s± one ju¿ zakupione i~mamy ich du¿o
+    \item nasza praca pozwoli nastêpnym studentom w~pe³ni wykorzystaæ ich mo¿liowo¶ci
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Co potrafi taki zegarek i~jaki jest stan prac}
+  \begin{center}
+    \LARGE
+    \emph{Demo}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Hardware zegarka}
+  \begin{itemize}
+    \item Procesor 20 MHz
+    \item 4KB RAM
+    \item 32KB flash (pamiêæ programu)
+    \item Radio 868 MHz (transmisja 11 KB/s)
+    \item Wy¶wietlacz LCD (4 +~5 cyfr oraz ikonki)
+    \item Port szeregowy - UART (printf do PC itp.)
+    \item Akcelerometr 3D
+    \item Miernik ci¶nienia
+    \item 5 przycisków
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Zasadniczy problem}
+   ????problem zasadniczy - czas ¿ycia na bateriach i~zu¿ycie energii - to decyduje o~wszystskich kompromisach projektowych!??????????
+\end{frame}
+
+\begin{frame}{Tradycyjny sposób ich programowania}
+  ??????????jak robi³o siê to zawsze - funkcja main(, wiele plików c, byæ mo¿e biblioteki. Piszemy swobodnie po rejestrach. Spore zamieszanie. Brak dostêpnych abstrakcji. Piszesz po rejestrach - wady powy¿szego podej¶cia: nieprzeno¶ne, ka¿dy kontroler musi miec osobny code base, utrudnia zrobienie uniwersalnych stosów siecowych, masa b³êdów wielokrotnego w³±czaenia, konflikty sprzêtowe, b³êdy dostêpu do pamiêci, ¶mieciaste aplikacje etc.)???
+\end{frame}
+
+\begin{frame}{Typowy kod}
+  ??????????
+\end{frame}
+
+\begin{frame}{Rozwi±zanie}
+  \begin{itemize}
+    \item TinyOS jest systemem powsta³ym z~my¶l± o~tych problemach
+    \item Aby im zaradziæ potrzeba by³o nowych narzêdzi - a~w~szczególno¶ci nowego jêzyka: \emph{nesC}
+  \end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
 \begin{frame}{TinyOS 1.0}
   Zalety:
   \begin{itemize}
