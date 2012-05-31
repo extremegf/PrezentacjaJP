@@ -252,7 +252,22 @@
 \end{frame}
 
 \begin{frame}{Case study: Virtualized timers}
-  Pierwszy przyk³ad - tyle zegarów ile tylko chcemy!
+  Problem:
+  \begin{itemize}
+    \item Sterowanie urz±dzeniem wymaga zegarów. Potrzebujemy ich du¿o.
+    \item Jest tylko parê (zwykle 3) na jednym procesorze.
+  \end{itemize}
+  Rozwi±zanie:
+  \begin{itemize}
+    \item Wirtualizacja zasobu:
+    \begin{itemize}
+      \item TinyOS dostarcza generyczny komponent zegar: TimerMilliC
+      \item Mo¿emy mieæ wiele instacji jego i u¿ywaæ go jak zegara sprzêtowego.
+      \item Jest Singleton, który kontrolujê dostêp do sprzêtu przez interfejs Alarm. 
+    \end{itemize}
+    \item Alokujemy dok³adnie tyle zasobów ile potrzeba.
+    \item Unikamy niepotrzebnych zale¿no¶ci pomiêdzy komponentami.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Case study: Integrated concurency and power management}
