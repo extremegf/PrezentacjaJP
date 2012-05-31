@@ -13,7 +13,7 @@
 \subtitle{Nowa era programowania mikrourz±dzeñ} % (optional)
 
 \author % (optional, use only with lots of authors)
-{Przemys³aw Horban i~Jacek Migda³}
+{Przemys³aw Horban, Jacek Migda³}
 
 \institute{Uniwersytet Warszawski}
 \date[Short Occasion] % (optional)
@@ -61,7 +61,8 @@
     \item architektura MSP430
     \item pracujemy nad przeniesieniem TinyOS na t± platformê
     \item s± one ju¿ zakupione i~mamy ich du¿o
-    \item nasza praca pozwoli nastêpnym studentom w~pe³ni wykorzystaæ ich mo¿liowo¶ci
+    \item nasza praca pozwoli nastêpnym studentom w~pe³ni wykorzystaæ ich
+      mo¿liowo¶ci (sterowniki, wygodne ¶rodowisko programistyczne)
   \end{itemize}
 \end{frame}
 
@@ -86,22 +87,63 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Zasadniczy problem}
-   ????problem zasadniczy - czas ¿ycia na bateriach i~zu¿ycie energii - to decyduje o~wszystskich kompromisach projektowych!??????????
-
-    % \item du¿e problemy z~zarz±dzaniem pamiêci± (crash gdy jej zabraknie)
-    % \item czêste b³êdy przy wspó³bie¿no¶ci, ze wzglêdu na przeploty z~przerwaniami
-    % \item b³êdy podwójnej lub zapomnianej inicjalizacji
-    % \item trudne do ogarniêcia zale¿no¶ci miêdzy komponentami
-    % \item oddzielna kompilacja utrudnia statyczn± analizê
+\begin{frame}{}
+  \huge{ Po³±czyli¶my w sieæ komputery, komórki... ale co z reszt± urz±dzeñ? }
 \end{frame}
 
-\begin{frame}{Tradycyjny sposób ich programowania}
-  ??????????jak robi³o siê to zawsze - funkcja main(, wiele plików c, byæ mo¿e biblioteki. Piszemy swobodnie po rejestrach. Spore zamieszanie. Brak dostêpnych abstrakcji. Piszesz po rejestrach - wady powy¿szego podej¶cia: nieprzeno¶ne, ka¿dy kontroler musi miec osobny code base, utrudnia zrobienie uniwersalnych stosów siecowych, masa b³êdów wielokrotnego w³±czaenia, konflikty sprzêtowe, b³êdy dostêpu do pamiêci, ¶mieciaste aplikacje etc.)???
+\begin{frame}{Potrzebujemy nowej klasy urz±dzeñ}
+  Potrzebujemy nowej klasy urz±dzeñ:
+  \begin{itemize}
+    \item tanich
+    \item "gadaj±cych" po radiu
+    \item wytrzymuj±cych lata na bateriach - ultra niski duty cycle
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Typowy kod}
-  ??????????
+\begin{frame}{Przyk³ady}
+  Przyk³ady:
+  \begin{itemize}
+    \item Smart Grid
+    \item sterowanie ruchem ulicznym
+    \item monitorowanie zasobów
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Software}
+  Jak programowaæ
+  \begin{itemize}
+    \item Producent do³±cza system chronos...
+    \item W jêzyku C z dodatkowymi definicjami.
+    \item Wszystko trzeba robiæ rêcznie, ustawiaæ warto¶ci itp.
+    \item Debugowanie i testowanie to koszmar.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Przyk³ad kodu Texas Instruments}
+\begin{verbatim}
+ 24 #include "msp430x22x4.h"
+ 25 
+ 26 void main(void)
+ 27 {
+ 28   WDTCTL = WDT_ADLY_250;                    
+ 29   IE1 |= WDTIE;                             
+ 30   P1DIR |= 0x01;                           
+ 31 
+ 32   __bis_SR_register(LPM3_bits + GIE);       
+ 33 }
+ 34 
+ 35 // Watchdog Timer interrupt service routine
+ 36 #pragma vector = WDT_VECTOR
+ 37 __interrupt void watchdog_timer(void)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Sterowniki w chronos}
+  \begin{itemize}
+    \item Pliki .c .h, które udostêpniaj± parê funkcji
+    \item Niestety s± singletonem, nie maj± ¿adnej kontroli dostêpu.
+    \item Problem braku inicjalizacji, podwójnej inicjalizacji, konflikt w dostêpie do zasobów...
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Rozwi±zanie}
@@ -111,9 +153,34 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}nesC{}
-  ?????????????
+\begin{frame}{nesC}
+   Czê¶æ funkcjonalno¶ci TinyOS realizuje kompilator nesC:
+   \begin{itemize}
+     \item nesC: rozszerzenie C, jest te¿ kompilowane do C
+     \item wielow±tkowo¶æ bez wyw³aszczeñ
+     \item statyczna 'obiektowo¶æ' - na poziomie kompilacji
+%     \item zdarzenia, polecenia i zadania
+  \end{itemize}
 \end{frame}
+
+\begin{frame}{nesC - organizacja kodu}
+	Organizacja kodu:
+   \begin{itemize}
+   	 \item dwukierunkowy zbiór sygnatur funkcji - interfejs
+   	 \begin{itemize}
+   	    \item zdarzenie (event)
+   	    \item zadanie (task)
+   	    \item polecenie (command)
+   	 \end{itemize}
+     \item kod C - modu³y
+     \begin{itemize}
+     	\item wykorzystujê i dostarcza interfejsów
+     \end{itemize}
+     \item ³±czenie wielu komponentów w jeden - konfiguracja
+%     \item zdarzenia, polecenia i zadania
+  \end{itemize}
+\end{frame}
+
 
 \begin{frame}{TinyOS 2.0}
   Jak to dzia³a?
@@ -162,6 +229,7 @@
     \item Ma bardzo przyjazn± licencjê
   \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Pojêcie hermetycznego komponentu}
   Jest to co¶ co bardzo u³atwia pracê programisty.
@@ -214,7 +282,22 @@
 \end{frame}
 
 \begin{frame}{Case study: Virtualized timers}
-  Pierwszy przyk³ad - tyle zegarów ile tylko chcemy!
+  Problem:
+  \begin{itemize}
+    \item Sterowanie urz±dzeniem wymaga zegarów. Potrzebujemy ich du¿o.
+    \item Jest tylko parê (zwykle 3) na jednym procesorze.
+  \end{itemize}
+  Rozwi±zanie:
+  \begin{itemize}
+    \item Wirtualizacja zasobu:
+    \begin{itemize}
+      \item TinyOS dostarcza generyczny komponent zegar: TimerMilliC
+      \item Mo¿emy mieæ wiele instacji jego i u¿ywaæ go jak zegara sprzêtowego.
+      \item Jest Singleton, który kontrolujê dostêp do sprzêtu przez interfejs Alarm. 
+    \end{itemize}
+    \item Alokujemy dok³adnie tyle zasobów ile potrzeba.
+    \item Unikamy niepotrzebnych zale¿no¶ci pomiêdzy komponentami.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Case study: Integrated concurency and power management}
