@@ -101,12 +101,23 @@
 \end{frame}
 
 \begin{frame}{Przyk³ady}
-  Przyk³ady:
-  \begin{itemize}
-    \item Smart Grid
-    \item sterowanie ruchem ulicznym
-    \item monitorowanie zasobów
-  \end{itemize}
+  \begin{columns}
+    \begin{column}[l]{5cm}
+      Przyk³ady:
+      \begin{itemize}
+        \item Smart Grid
+        \item sterowanie ruchem ulicznym
+        \item monitorowanie zasobów
+      \end{itemize}
+    \end{column}
+    \begin{column}[r]{5cm}
+
+      \begin{figure} [ht]
+        \centering
+        \includegraphics[height=0.7 \textheight]{Internet-of-the-things.jpg}
+      \end{figure}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Software}
@@ -285,15 +296,15 @@
   Problem:
   \begin{itemize}
     \item Sterowanie urz±dzeniem wymaga zegarów. Potrzebujemy ich du¿o.
-    \item Jest tylko parê (zwykle 3) na jednym procesorze.
+    \item Mamy ich ma³o (zazwyczaj 3).
   \end{itemize}
   Rozwi±zanie:
   \begin{itemize}
-    \item Wirtualizacja zasobu:
+    \item Wirtualizacja:
     \begin{itemize}
-      \item TinyOS dostarcza generyczny komponent zegar: TimerMilliC
-      \item Mo¿emy mieæ wiele instacji jego i u¿ywaæ go jak zegara sprzêtowego.
-      \item Jest Singleton, który kontrolujê dostêp do sprzêtu przez interfejs Alarm. 
+      \item TinyOS dostarcza generyczny komponent zegara: TimerMilliC
+      \item Mo¿emy mieæ wiele instacji jego i~u¿ywaæ go jako zegara sprzêtowego.
+      \item Jest Singleton, który kontrolujê dostêp do sprzêtu. 
     \end{itemize}
     \item Alokujemy dok³adnie tyle zasobów ile potrzeba.
     \item Unikamy niepotrzebnych zale¿no¶ci pomiêdzy komponentami.
